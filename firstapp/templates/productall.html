@@ -1,0 +1,51 @@
+{% extends 'common.html' %}
+
+{% block content %}
+<head>
+    <style>
+        .col py-3 .element.style{
+            background-color:black;
+        }
+        .card{
+            --bs-card-bg: black;
+            }
+            .mb-0{
+                color:white;
+            }
+            .py-3{
+                background:black;
+            }
+            .card-img, .card-img-top {
+                border-style: solid;
+                border-width: 5px;
+                border-color: white;
+            }
+    </style>
+</head>
+                <!--content-->
+<div class="col py-3">
+    <section style="background-color: black;">
+        <div class="container py-5">
+            <div class="row">
+                {% for i in data %}
+                    <div class="col-md-4 col-lg-4 mb-4 mb-lg-0">
+                        <a style="text-decoration:none;" href="{% url 'productget1' i.id %}">
+                        <div class="card">
+                            <img src="{{i.img.url}}"
+                                class="card-img-top" height="300px"  />
+                            <div class="card-body" style="align-self: center;">
+                                <h5 class="mb-0" style="align-self:center;">{{i.name}}</h5>
+                                <h5 class="mb-0" style="align-self:center;">₹ {{i.price}}</h5>
+                            </div>
+                           
+                        </div>
+                    </a>
+                    </div>
+                    {% endfor %}
+            </div>
+        </div>
+       
+    </section>
+</div>
+    
+{% endblock %}        

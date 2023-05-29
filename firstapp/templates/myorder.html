@@ -1,0 +1,55 @@
+{% extends 'common.html' %}
+{%block content%}
+{% load static %}
+
+<head>
+    
+    <link rel="stylesheet" type="text/css" href="{% static 'myorderr.css' %}" />
+
+</head>
+
+<div method="POST" class="container mt-5">
+    <div class="d-flex justify-content-center row">
+        <div class="col-md-10">
+            <div class="rounded">
+                <div class="table-responsive table-borderless">
+                    <table class="table">
+                        <form method="POST" >
+                            {% csrf_token %}
+                        <thead>
+                            
+                            <tr>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Transcation ID</th>
+                                <th>Total Quantity</th>
+                                <th>Date of order</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        {% for i in prolist %}
+                        <tbody class="table-body">
+                           
+                            <tr class="cell-1"> 
+                                <td> <img src="{{i.image.url}}" height="100px"  /></td>
+                               
+                                <td>{{i.name}}</td>
+                                <td>{{i.price}}</td>
+                                <td>{{i.transactionid}}</td>
+                                <td>{{i.quantity}}</td>
+                                <td>{{i.date}}</td>
+                                <td><i class="fa fa-ellipsis-h text-black-50"></i></td>
+                                {%endfor%}
+                            </tr>
+                            
+                        </tbody>
+                    </form>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock%}

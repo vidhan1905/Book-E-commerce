@@ -1,0 +1,20 @@
+.mb-0{
+    color:white;
+}
+.row{
+    background-color: black;
+}
+element.style {
+    background-color: black;
+}
+.card{
+--bs-card-bg: black;
+}
+.py-3{
+    background:black;
+}
+.card-img, .card-img-top {
+    border-style: solid;
+    border-width: 3px;
+    border-color: white;
+}

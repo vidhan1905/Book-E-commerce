@@ -1,0 +1,45 @@
+{% extends 'common.html' %}
+
+{% block content %}
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SignIn</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'login.css' %}" />
+    <script
+      src="https://kit.fontawesome.com/64d58efce2.js"
+      crossorigin="anonymous"
+    ></script>
+  
+  </head>
+  <body>
+    <div class="container">
+      <div class="forms-container">
+        <div class="signin-signup">
+          <form method = "POST" action="" class="sign-in-form">
+
+            <h2 class="title">Login</h2>
+            {% csrf_token %}
+            <div class="input-field">
+              <i class="fas fa-user"></i>
+              <input type="email" name="email" id="email" placeholder="Username or Email" required="">
+            </div>
+            <div class="input-field">
+              <i class="fas fa-lock"></i>
+              <input type="password" name="password" id="Password" placeholder="Password" required="">
+            </div>
+            <button type="submit" class="btn btn-primary btn-style">Login now</button>
+            </div>
+          </form>
+        </div>
+        
+      </div>
+      {% if message %}<script>alert("{{message}}")</script>{% endif %}
+    </div>
+  </body>
+</html>
+{% endblock%}
