@@ -20,30 +20,37 @@
     <div class="container">
       <div class="forms-container">
         <div class="signin-signup">
-          <form method= "post"  class="sign-in-form">
-            <h2 class="title">Register  </h2>
+          <form method= "post"  class="sign-in-form" enctype="multipart/form-data">
+            <h2 class="title">Add Book</h2>
+            <div>
+                <label>Category</label>
+                <select name="category" id="name">
+                    {% for i in data %}
+                    <option value={{i.id}} selected="selected" >{{i.categoryname}}</option>
+                    {% endfor %}
+            </div>
             {% csrf_token %}
             <div class="input-field">
               <i class="fas fa-user"></i>
-              <input type="text" name='name' placeholder="Username" />
-            </div>
-            <div class="input-field">
-              <i class="fas fa-user"></i>
-              <input type="email" name='email' placeholder="Email" />
+              <input type="text" name='productname' placeholder="Product Name" required=""/>
             </div>
             <div class="input-field">
               <i class="fas fa-lock"></i>
-              <input type="password" name = 'password' placeholder="Password" />
+              <input type="file" name = 'image' placeholder="Product Image" required=""/>
             </div>
             <div class="input-field">
               <i class="fas fa-user"></i>
-              <input type="Address" name='address' placeholder="Address" />
+              <input type="number" name='quantity' placeholder="Quantity" required=""/>
             </div>
             <div class="input-field">
               <i class="fas fa-user"></i>
-              <input type="Phone" name = 'phone'placeholder="Phone Number" />
+              <input type="number" name = 'price' placeholder="Price" required=""/>
             </div>
-            <input type="submit" value="Login" class="btn solid" />
+            <div class="input-field">
+                <i class="fas fa-user"></i>
+                <input type="text" name = 'Description'placeholder="Description" required=""/>
+              </div>
+            <input type="submit" value="Submit" class="btn solid" />
             </div>
           </form>
         </div>

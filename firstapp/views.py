@@ -21,33 +21,62 @@ def login1(request):
                 return render(request,"login.html",{'message':"Invalid email or password"})
     return render(request,'login.html')
 
-def about(request):
-    if 'email' in request.session:
-        a=request.session['email']
-        return render(request,'aboutus.html',{'a':a})
-    return render(request,'aboutus.html')
-
 def logout(request):
     if 'email' in request.session.keys():
         del request.session['email']
         return redirect('index')
     else:
         return redirect('index')
+    
+def vendorlogin1(request):
+    if request.method=="POST":
+        emaill=request.POST['email']
+        passwordd=request.POST['password']
+        try:
+            data=VendorRegister.objects.get(email=emaill,password=passwordd)
+            if data:
+                request.session['vendoremail']=data.email
+                return redirect('index')
+            else:
+                return render(request,"vendorlogin.html",{'message':"Invalid email or password"})
+        except:
+                return render(request,"vendorlogin.html",{'message':"Invalid email or password"})
+    return render(request,'vendorlogin.html')
 
-def table_view(request):
-    a=Product.objects.all()
-    print("pdata",a)
-    return render(request,'table.html',{"pdata":a})
+def vendorlogout(request):
+    if 'vendoremail' in request.session.keys():
+        del request.session['vendremail']
+        return redirect('index')
+    else:
+        return redirect('index')
 
-def table_filter(request):
-    a=Product.objects.filter(price=200)
-    print("pdata",a)
-    return render(request,'table.html',{'pdata':a})
+def about(request):
+    if 'email' in request.session:
+        # a=request.session['email']
+        return render(request,'aboutus.html')
+    return render(request,'aboutus.html')
 
-def table_getdata(request):
-    a=Product.objects.get(name='Mercedes')
-    print("pdata",a)
-    return render(request,'getdata.html',{'pdata':a})
+from django.core.mail import send_mail
+def forget(request):
+    if request.POST:
+        useremail=request.POST['email']
+        try:
+            data=UserRegister.objects.get(email=useremail)
+            if data:
+                send_mail(
+                "Forgot Password",
+                "Dear " +str(data.name)+"\n Your Password is :"+str(data.password),
+                "youremail",
+                [useremail],
+                fail_silently=False,
+                )
+                return render(request,'forgetpass.html',{'message':'Password  Sent To Your Email'})
+            else:
+                return render(request,'forgetpass.html',{'message':'Email Id Not Found'})
+        except:
+            return render(request,'forgetpass.html',{'message':'Email Id Not Found'})
+    return render(request,'forgetpass.html')
+
 
 # productdata=Product.objects.get(id=request.session['productid'])
             # productdata.quantity=productdata.quantity-int(request.session['quantity'])
@@ -85,6 +114,10 @@ def index(request):
         a=request.session['email']
         data = Category.objects.all()
         return render(request,'base.html',{'data':data,'a':a})
+    elif 'vendoremail' in request.session:
+        a=request.session['vendoremail']
+        data = Category.objects.all()
+        return render(request,'base.html',{'data':data,'a':a})
     else:
          data = Category.objects.all() 
          return render(request,'base.html',{'data':data})       
@@ -92,6 +125,10 @@ def index(request):
 def productall(request):
     if 'email' in request.session:
         a=request.session['email']
+        data=Product.objects.all()
+        return render(request,'productall.html',{'data':data,'a':a})
+    elif 'vendoremail' in request.session:
+        a=request.session['vendoremail']
         data=Product.objects.all()
         return render(request,'productall.html',{'data':data,'a':a})
     else:
@@ -104,6 +141,10 @@ def productcategorywise(request,id):
         a=request.session['email']
         data=Product.objects.filter(category=id)
         return render(request,'productall.html',{'data':data,'a':a})
+    elif 'vendoremail' in request.session:
+        a=request.session['vendoremail']
+        data=Product.objects.filter(category=id)
+        return render(request,'productall.html',{'data':data,'a':a})
     else:
         data=Product.objects.filter(category=id)
         return render(request,'productall.html',{'data':data})
@@ -111,6 +152,10 @@ def productcategorywise(request,id):
 def singleproduct(request,id):
     if 'email' in request.session:
         a=request.session['email']
+        data=Product.objects.get(pk=id)
+        return render(request,'singleproduct.html',{'data':data,'a':a})
+    elif 'vendoremail' in request.session:
+        a=request.session['vendoremail']
         data=Product.objects.get(pk=id)
         return render(request,'singleproduct.html',{'data':data,'a':a})
     else:
@@ -134,11 +179,68 @@ def register(request):
 
     return render(request,'register.html')
 
+def vendorregister(request):
+    if request.method=="POST":
+        namee=request.POST['name']
+        emaill=request.POST['email']
+        passwordd=request.POST['password']
+        phonee=request.POST['phone']
+        addresss=request.POST['address']
+        data=VendorRegister(name=namee,email=emaill,password=passwordd,phone=phonee,address=addresss)
+        a=VendorRegister.objects.filter(email=emaill)
+        if len(a)==0:
+            data.save()
+            return redirect('login2')
+        else:
+            return render(request,'vendorregister.html',{'message':"user alredy exist"}) 
+
+    return render(request,'vendorregister.html')
+
+def search(request):
+    if 'email' in request.session:
+        a=request.session['email']
+        if request.method == "POST":
+            namee = request.POST['q']
+            posts = Product.objects.filter(name=namee)
+            if posts:
+                return render(request, 'search.html', {'posts': posts, 'namee': namee,"a":a})
+            else:
+                return redirect('productall')
+        else:
+         return render(request, 'base.html')
+    else:
+        if request.method == "POST":
+            namee = request.POST['q']
+            posts = Product.objects.filter(name=namee)
+            return render(request, 'search.html', {'posts': posts, 'namee': namee})
+        else:
+         return render(request, 'base.html')
+
+from django.db.models import Q       
+def searchview(request):
+    word = request.GET.get('q')
+    spl = word.split(" ")
+    for i in spl:
+        b=Product.objects.filter(Q(category__categoryname__icontains=i) | Q(name__icontains=i) | Q(price__icontains=i)).distinct()
+
+    return render(request,'productall.html',{'data':b,'word':word})
+
 def contact(request):
     if 'email' in request.session:
         a=request.session['email']
-        print(a)
         data=UserRegister.objects.get(email=a)
+        if request.method=="POST":
+            contact_us=Contact()
+            contact_us.name=request.POST['name']
+            contact_us.email=request.POST['email']
+            contact_us.phone=request.POST['phone']
+            contact_us.text=request.POST['message']
+            contact_us.save()
+            return render(request,'contactus.html',{'message':"Message sent",'a':a})
+        return render(request,'contactus.html',{'data':data,'a':a})
+    elif 'vendoremail' in request.session:
+        a=request.session['vendoremail']
+        data=VendorRegister.objects.get(email=a)
         if request.method=="POST":
             contact_us=Contact()
             contact_us.name=request.POST['name']
@@ -317,3 +419,22 @@ def successview(request):
         return render(request,'order_sucess.html',{'a':a})
     else:
         return HttpResponseBadRequest()
+
+def addproduct(request):
+    if 'vendoremail' in request.session:
+        vendor=VendorRegister.objects.get(email=request.session['vendoremail'])
+        abc=Category.objects.all()
+        if request.method=="POST" and request.FILES:
+            vendorid=vendor.pk
+            categoryid=Category.objects.get(id=int(request.POST['category']))
+            productname=request.POST['productname']
+            productprice=request.POST['price']
+            image=request.FILES['image']
+            quantity=request.POST['quantity']
+            desc=request.POST['Description']
+            # product=Product(vendorid=vendorid,categoryid=categoryid,productname=productname,productprice=productprice,image=image,quantity=quantity,description=desc)
+            # product.save()
+            Product.objects.create(vendorid=vendorid,category=categoryid,name=productname,img=image,price=productprice,description=desc,quantity=quantity)
+        return render(request,'addproduct.html',{'data':abc})
+    else:
+        return redirect('login2')

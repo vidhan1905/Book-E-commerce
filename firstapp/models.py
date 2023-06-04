@@ -9,6 +9,7 @@ class Category(models.Model):
     
 
 class Product(models.Model):
+    vendorid=models.CharField(max_length=150,default="")
     category=models.ForeignKey(Category,on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     img=models.ImageField(upload_to='product')
@@ -16,8 +17,14 @@ class Product(models.Model):
     description = models.TextField()
     quantity=models.IntegerField()
 
-
 class UserRegister(models.Model):
+    name = models.CharField(max_length=200)
+    email = models.EmailField()
+    password = models.CharField(max_length=200)
+    address = models.CharField(max_length=200)
+    phone = models.IntegerField()
+
+class VendorRegister(models.Model):
     name = models.CharField(max_length=200)
     email = models.EmailField()
     password = models.CharField(max_length=200)

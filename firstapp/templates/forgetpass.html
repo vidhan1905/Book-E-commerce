@@ -20,22 +20,16 @@
     <div class="container">
       <div class="forms-container">
         <div class="signin-signup">
-          <form  method = "POST" action="" class="sign-in-form">
+          <form method = "POST" action="" class="sign-in-form">
 
-            <h2 class="title">Login</h2>
+            <h2 class="title">Forget Password</h2>
             {% csrf_token %}
             <div class="input-field">
               <i class="fas fa-user"></i>
               <input type="email" name="email" id="email" placeholder="Username or Email" required="">
             </div>
-            <div class="input-field">
-              <i class="fas fa-lock"></i>
-              <input type="password" name="password" id="Password" placeholder="Password" required="">
-            </div>
-            <button type="submit" class="btn btn-primary btn-style">Login now</button>
-            
-              <a class="nav-link" href={% url 'forget' %}>Forget Password</a>
-          
+
+            <button type="submit" class="btn btn-primary btn-style">Submit</button>
             </div>
           </form>
         </div>

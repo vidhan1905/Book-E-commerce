@@ -14,6 +14,11 @@ class userregister(admin.ModelAdmin):
 
 admin.site.register(UserRegister,userregister)
 
+class vendorregister(admin.ModelAdmin):
+    list_display=['name','email','phone']
+
+admin.site.register(VendorRegister,vendorregister)
+
 class contactregister(admin.ModelAdmin):
     list_display=['name','email','phone']
 admin.site.register(Contact,contactregister)
