@@ -354,8 +354,8 @@ def buynow(request):
         return redirect('login1')
 
 
-RAZOR_KEY_ID = 'rzp_test_IzzOnFRgVnncgU'
-RAZOR_KEY_SECRET = 'EBZIDtp6Qy1IEWRCCRI8o1fe'
+RAZOR_KEY_ID = ''
+RAZOR_KEY_SECRET = ''
 client = razorpay.Client(auth=(RAZOR_KEY_ID, RAZOR_KEY_SECRET))
 
 
