@@ -55,7 +55,7 @@ def vendorlogin1(request):
 
 def vendorlogout(request):
     if 'vendoremail' in request.session.keys():
-        del request.session['vendremail']
+        del request.session['vendoremail']
         return redirect('index')
     else:
         return redirect('index')
